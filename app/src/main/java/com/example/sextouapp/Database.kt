@@ -24,10 +24,40 @@ class Database(context: Context?) :
         db.execSQL(Event.SQL_CREATE)
         db.execSQL(Reservation.SQL_CREATE)
         db.execSQL(Participant.SQL_CREATE)
+
+        populate(db)
     }
 
     override fun onUpgrade(db: SQLiteDatabase, oldVersion: Int, newVersion: Int) {
         Log.d("SextouApp", "Database onUpgrade from $oldVersion to $newVersion")
+    }
+
+    private fun populate(db: SQLiteDatabase) {
+        Log.d("SextouApp", "Database populate()")
+
+        // Categories
+        db.execSQL("INSERT INTO 'categories' ('name') VALUES ('Vida noturna');")
+        db.execSQL("INSERT INTO 'categories' ('name') VALUES ('Restaurante');")
+
+        // Events
+        db.execSQL("INSERT INTO 'events' ('name', 'address', 'category_id') VALUES " +
+                "('Noite de massas do Nico', " +
+                "'R. Antônio da Veiga, 213 - Victor Konder, Blumenau - SC, 89012-500', " +
+                "2);")
+
+        db.execSQL("INSERT INTO 'events' ('name', 'address', 'category_id') VALUES " +
+                "('Cover Linkin Park', " +
+                "'R. São Paulo, 2083 - Itoupava Seca, Blumenau - SC, 89030-000', " +
+                "1);")
+
+        // Reservations
+        db.execSQL("INSERT INTO 'reservations' ('event_id') VALUES (1);")
+
+        // Participants
+        db.execSQL("INSERT INTO 'participants' ('name', 'document', 'reservation_id') VALUES" +
+                "('Alex Souza', '70870428071', 1);")
+        db.execSQL("INSERT INTO 'participants' ('name', 'document', 'reservation_id') VALUES" +
+                "('Camila Paes', '32038337004', 1);")
     }
 
 }
