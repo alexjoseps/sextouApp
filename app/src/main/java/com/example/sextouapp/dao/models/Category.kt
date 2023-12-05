@@ -6,6 +6,6 @@ class Category {
         const val ID  = "id"
         const val NAME  = "name"
 
-        val SQL_CREATE = "CREATE TABLE $TABLE ($ID INTEGER PRIMARY KEY AUTOINCREMENT, $NAME TEXT);";
+        val SQL_CREATE = "CREATE TABLE $TABLE ($ID INTEGER PRIMARY KEY AUTOINCREMENT, $NAME TEXT NOT NULL UNIQUE);";
     }
 }

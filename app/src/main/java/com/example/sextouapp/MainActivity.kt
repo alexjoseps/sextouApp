@@ -34,6 +34,7 @@ class MainActivity : AppCompatActivity() {
         listView.adapter = adapter
 
         database = Database(baseContext)
+        sqlOpen = database.writableDatabase
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {

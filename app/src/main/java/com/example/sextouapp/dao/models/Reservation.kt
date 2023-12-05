@@ -7,7 +7,8 @@ class Reservation {
         const val EVENT_ID  = "event_id"
 
         val SQL_CREATE = "CREATE TABLE $TABLE ( " +
-                "$ID INTEGER PRIMARY KEY AUTOINCREMENT " +
+                "$ID INTEGER PRIMARY KEY AUTOINCREMENT, " +
+                "$EVENT_ID INTEGER NOT NULL, " +
                 "FOREIGN KEY($EVENT_ID) REFERENCES ${Event.TABLE} (${Event.ID}));";
     }
 }
