@@ -1,5 +1,6 @@
 package com.example.sextouapp
 
+import android.database.sqlite.SQLiteDatabase
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
@@ -11,6 +12,9 @@ import android.widget.ListView
 import androidx.appcompat.widget.Toolbar
 
 class MainActivity : AppCompatActivity() {
+    lateinit var database: Database
+    lateinit var sqlOpen: SQLiteDatabase
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -28,6 +32,8 @@ class MainActivity : AppCompatActivity() {
         minhaLista.add("Don Pub");
         val adapter = ArrayAdapter(this,android.R.layout.simple_list_item_1, minhaLista)
         listView.adapter = adapter
+
+        database = Database(baseContext)
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
@@ -42,7 +48,7 @@ class MainActivity : AppCompatActivity() {
                 true
             }
             R.id.events_item -> {
-                Log.i(null, "Eventos");
+                Log.i("Alex", "Eventos");
                 true
             }
             R.id.categories_item -> {
