@@ -5,8 +5,7 @@ import android.database.sqlite.SQLiteDatabase
 import android.util.Log
 import com.example.sextouapp.Database
 
-class ParticipantDao (context: Context? )
-{
+class ParticipantDao(context: Context?) {
     private lateinit var sqlOpen: SQLiteDatabase
     private var database: Database
 

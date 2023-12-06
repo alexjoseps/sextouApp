@@ -1,5 +1,6 @@
 package com.example.sextouapp
 
+import android.content.Intent
 import android.database.sqlite.SQLiteDatabase
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -10,6 +11,8 @@ import android.view.MenuItem
 import android.widget.ArrayAdapter
 import android.widget.ListView
 import androidx.appcompat.widget.Toolbar
+import com.example.sextouapp.adapters.EventItem
+import com.example.sextouapp.dao.EventDao
 
 class MainActivity : AppCompatActivity() {
     lateinit var database: Database
@@ -25,16 +28,19 @@ class MainActivity : AppCompatActivity() {
         supportActionBar?.setTitle("Sextou!");
         supportActionBar?.setSubtitle("Ache seu rolê")
 
-        val listView : ListView = findViewById(R.id.events_list)
-        val minhaLista = ArrayList<String>()
-        minhaLista.add("Balburdia");
-        minhaLista.add("Trezze");
-        minhaLista.add("Don Pub");
-        val adapter = ArrayAdapter(this,android.R.layout.simple_list_item_1, minhaLista)
-        listView.adapter = adapter
-
         database = Database(baseContext)
         sqlOpen = database.writableDatabase
+
+        val listView: ListView = findViewById(R.id.events_list)
+        val events = EventDao(baseContext).getAll()
+        val eventItemAdapter = EventItem(this, events)
+        listView.adapter = eventItemAdapter
+
+        listView.setOnItemClickListener { parent, view, position, id ->
+            events[position]
+
+            startActivity(Intent(baseContext, EventActivity::class.java))
+        }
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
@@ -45,17 +51,11 @@ class MainActivity : AppCompatActivity() {
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
-            R.id.search_item -> {
+            R.id.new_event -> {
+                Log.i("SextouApp", "Criar evento");
                 true
             }
-            R.id.events_item -> {
-                Log.i("Alex", "Eventos");
-                true
-            }
-            R.id.categories_item -> {
-                Log.i(null, "Categorias");
-                true
-            }
+
             else -> super.onOptionsItemSelected(item)
         }
     }

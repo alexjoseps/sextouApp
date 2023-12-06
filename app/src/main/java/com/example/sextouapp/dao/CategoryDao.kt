@@ -5,8 +5,7 @@ import android.database.sqlite.SQLiteDatabase
 import android.util.Log
 import com.example.sextouapp.Database
 
-class CategoryDao (context: Context? )
-{
+class CategoryDao(context: Context?) {
     private lateinit var sqlOpen: SQLiteDatabase
     private var database: Database
 
