@@ -8,20 +8,18 @@ import android.util.Log
 import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
+import android.widget.ArrayAdapter
 import android.widget.ListView
 import androidx.appcompat.widget.Toolbar
-import com.example.sextouapp.adapters.EventItem
-import com.example.sextouapp.adapters.ReservationItem
-import com.example.sextouapp.dao.EventDao
-import com.example.sextouapp.dao.ReservationDao
+import com.example.sextouapp.dao.ParticipantDao
 
-class ReservationActivity : AppCompatActivity() {
+class ParticipantActivity : AppCompatActivity() {
     lateinit var database: Database
     lateinit var sqlOpen: SQLiteDatabase
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_reservation)
+        setContentView(R.layout.activity_participant)
 
         val toolbar = findViewById<Toolbar>(R.id.toolbar)
         setSupportActionBar(toolbar)
@@ -29,28 +27,18 @@ class ReservationActivity : AppCompatActivity() {
         supportActionBar?.setTitle("Sextou!");
         supportActionBar?.setSubtitle("Ache seu rolê")
 
-        database = Database(baseContext)
-        sqlOpen = database.writableDatabase
-
-        val reservationsListView: ListView = findViewById(R.id.reservations_list)
-        val reservations = ReservationDao(baseContext).getAll()
-        val reservationItemAdapter = ReservationItem(this, reservations)
-        reservationsListView.adapter = reservationItemAdapter
-
-        reservationsListView.setOnItemClickListener { parent, view, position, id ->
-            val i = Intent(baseContext, ParticipantActivity::class.java)
-
-            i.apply {
-                putExtra("reservationId", reservations[position].id)
-            }
-
-            startActivity(i)
-        }
+        val listView: ListView = findViewById(R.id.participants_list)
+        val participants =
+            ParticipantDao(baseContext).getAll(intent.getIntExtra("reservationId", 0))
+                .map { it.name }
+        val participantItemAdapter =
+            ArrayAdapter(this, android.R.layout.simple_list_item_1, participants)
+        listView.adapter = participantItemAdapter
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         val inflater: MenuInflater = menuInflater
-        inflater.inflate(R.menu.reservation_menu, menu)
+        inflater.inflate(R.menu.participant_menu, menu)
         return true
     }
 
@@ -58,12 +46,7 @@ class ReservationActivity : AppCompatActivity() {
         return when (item.itemId) {
             R.id.back_to_event -> {
                 Log.i("SextouApp", "Voltar para eventos");
-                    startActivity(Intent(baseContext, MainActivity::class.java))
-                true
-            }
-
-            R.id.new_reservation -> {
-                Log.i("SextouApp", "Criar Reserva");
+                startActivity(Intent(baseContext, MainActivity::class.java))
                 true
             }
 

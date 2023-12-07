@@ -28,9 +28,6 @@ class MainActivity : AppCompatActivity() {
         supportActionBar?.setTitle("Sextou!");
         supportActionBar?.setSubtitle("Ache seu rolê")
 
-        database = Database(baseContext)
-        sqlOpen = database.writableDatabase
-
         val listView: ListView = findViewById(R.id.events_list)
         val events = EventDao(baseContext).getAll()
         val eventItemAdapter = EventItem(this, events)
@@ -46,6 +43,13 @@ class MainActivity : AppCompatActivity() {
 
             startActivity(i)
         }
+
+        listView.setOnItemLongClickListener { parent, view, position, id ->
+            EventDao(baseContext).delete(events[position].id)
+            eventItemAdapter.notifyDataSetChanged()
+            startActivity(Intent(baseContext, MainActivity::class.java))
+            true
+        }
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
@@ -58,6 +62,11 @@ class MainActivity : AppCompatActivity() {
         return when (item.itemId) {
             R.id.new_event -> {
                 Log.i("SextouApp", "Criar evento");
+                true
+            }
+            R.id.reservations -> {
+                Log.i("SextouApp", "Reservas");
+                startActivity(Intent(baseContext, ReservationActivity::class.java))
                 true
             }
 

@@ -1,6 +1,6 @@
 package com.example.sextouapp.dao.models
 
-class Participant {
+class Participant(var id: Int, var name: String, var document: String, var reservationId: Int) {
     companion object {
         const val TABLE = "participants"
         const val ID = "id"

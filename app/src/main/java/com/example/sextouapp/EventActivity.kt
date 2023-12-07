@@ -9,6 +9,7 @@ import android.view.MenuItem
 import android.view.View
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
+import android.widget.Button
 import android.widget.EditText
 import android.widget.Spinner
 import androidx.appcompat.app.AppCompatActivity
@@ -42,7 +43,8 @@ class EventActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener {
 
         val spinner: Spinner = findViewById(R.id.categorySpinner)
         val categories = CategoryDao(baseContext).getAll().map { it.name }
-        val categorySpinnerAdapter = ArrayAdapter(this, android.R.layout.simple_spinner_item, categories)
+        val categorySpinnerAdapter =
+            ArrayAdapter(this, android.R.layout.simple_spinner_item, categories)
         categorySpinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
         spinner.adapter = categorySpinnerAdapter
         spinner.onItemSelectedListener = this
@@ -59,11 +61,6 @@ class EventActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener {
             R.id.back_to_event -> {
                 Log.i("SextouApp", "Voltar para eventos");
                 startActivity(Intent(baseContext, MainActivity::class.java))
-                true
-            }
-            R.id.reservations -> {
-                Log.i("SextouApp", "Reservas");
-                startActivity(Intent(baseContext, ReservationActivity::class.java))
                 true
             }
 

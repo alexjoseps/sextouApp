@@ -38,6 +38,7 @@ class Database(context: Context?) :
         // Categories
         db.execSQL("INSERT INTO 'categories' ('name') VALUES ('Vida noturna');")
         db.execSQL("INSERT INTO 'categories' ('name') VALUES ('Restaurante');")
+        db.execSQL("INSERT INTO 'categories' ('name') VALUES ('Lazer');")
 
         // Events
         db.execSQL(
@@ -54,8 +55,23 @@ class Database(context: Context?) :
                     "1);"
         )
 
+        db.execSQL(
+            "INSERT INTO 'events' ('name', 'address', 'category_id') VALUES " +
+                    "('Dazaranha', " +
+                    "'Alameda Duque de Caxias - Centro, Blumenau - SC, 89015-010', " +
+                    "3);"
+        )
+
+        db.execSQL(
+            "INSERT INTO 'events' ('name', 'address', 'category_id') VALUES " +
+                    "('Noite de vinhos do NOSSA Cozinha', " +
+                    "'R. João Pessoa, 1377 - Velha, Blumenau - SC, 89036-002', " +
+                    "2);"
+        )
+
         // Reservations
         db.execSQL("INSERT INTO 'reservations' ('event_id') VALUES (1);")
+        db.execSQL("INSERT INTO 'reservations' ('event_id') VALUES (4);")
 
         // Participants
         db.execSQL(
@@ -65,6 +81,14 @@ class Database(context: Context?) :
         db.execSQL(
             "INSERT INTO 'participants' ('name', 'document', 'reservation_id') VALUES" +
                     "('Camila Paes', '32038337004', 1);"
+        )
+        db.execSQL(
+            "INSERT INTO 'participants' ('name', 'document', 'reservation_id') VALUES" +
+                    "('Jorge Lucca Castro', '64710425159', 2);"
+        )
+        db.execSQL(
+            "INSERT INTO 'participants' ('name', 'document', 'reservation_id') VALUES" +
+                    "('Renan Mateus Martins', '19405181483', 2);"
         )
     }
 

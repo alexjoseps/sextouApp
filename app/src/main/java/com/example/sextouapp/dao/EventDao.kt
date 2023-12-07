@@ -26,6 +26,7 @@ class EventDao(context: Context?) {
         val events = ArrayList<Event>()
         while (cursor.moveToNext()) {
             val event = Event(
+                cursor.getInt(cursor.getColumnIndexOrThrow(Event.ID)),
                 cursor.getString(cursor.getColumnIndexOrThrow(Event.NAME)),
                 cursor.getString(cursor.getColumnIndexOrThrow(Event.ADDRESS)),
                 cursor.getInt(cursor.getColumnIndexOrThrow(Event.CATEGORY_ID))
@@ -36,5 +37,30 @@ class EventDao(context: Context?) {
         cursor.close()
 
         return events
+    }
+
+    fun delete(eventId: Int): Int {
+        sqlOpen = database.readableDatabase
+        return sqlOpen.delete(Event.TABLE, "id = ?", arrayOf(eventId.toString()))
+    }
+
+    fun getEventName(eventId: Int): String {
+        sqlOpen = database.readableDatabase
+
+        val cursor = sqlOpen.query(
+            Event.TABLE,
+            arrayOf("name"),
+            "id = ?",
+            arrayOf(eventId.toString()),
+            null,
+            null,
+            null
+        )
+
+        cursor.moveToFirst()
+        val eventName = cursor.getString(cursor.getColumnIndexOrThrow(Event.NAME))
+        cursor.close()
+
+        return eventName
     }
 }
