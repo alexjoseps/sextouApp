@@ -6,6 +6,7 @@ import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import android.widget.TextView
 import com.example.sextouapp.R
+import com.example.sextouapp.dao.ReservationDao
 import com.example.sextouapp.dao.models.Event
 
 class EventItem(
@@ -25,9 +26,12 @@ class EventItem(
 
         val eventNameField = rowView.findViewById(R.id.item_name) as TextView
         val eventAddressField = rowView.findViewById(R.id.item_address) as TextView
+        val reservationsCountView = rowView.findViewById(R.id.reservationsCountView) as TextView
 
         eventNameField.text = events[position].name
         eventAddressField.text = events[position].address
+        reservationsCountView.text =
+            ReservationDao(context).getReservationsCount(events[position].id).toString()
 
         return rowView
     }

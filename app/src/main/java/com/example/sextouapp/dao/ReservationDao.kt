@@ -56,4 +56,23 @@ class ReservationDao(context: Context?) {
 
         return participantsCount
     }
+
+    fun getReservationsCount(eventId: Int): Int {
+        sqlOpen = database.readableDatabase
+
+        val cursor = sqlOpen.query(
+            Reservation.TABLE,
+            null,
+            "${Reservation.EVENT_ID} = ?",
+            arrayOf(eventId.toString()),
+            null,
+            null,
+            null
+        );
+
+        val reservationsCount = cursor.count
+        cursor.close()
+
+        return reservationsCount
+    }
 }
