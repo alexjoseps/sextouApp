@@ -20,13 +20,7 @@ class EventDao(context: Context?) {
         sqlOpen = database.readableDatabase
 
         val cursor = sqlOpen.query(
-            Event.TABLE,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null
+            Event.TABLE, null, null, null, null, null, null
         );
 
         val events = ArrayList<Event>()
@@ -39,6 +33,7 @@ class EventDao(context: Context?) {
 
             events.add(event)
         }
+        cursor.close()
 
         return events
     }

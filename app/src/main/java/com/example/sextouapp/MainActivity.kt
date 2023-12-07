@@ -37,9 +37,14 @@ class MainActivity : AppCompatActivity() {
         listView.adapter = eventItemAdapter
 
         listView.setOnItemClickListener { parent, view, position, id ->
-            events[position]
+            val i = Intent(baseContext, EventActivity::class.java)
 
-            startActivity(Intent(baseContext, EventActivity::class.java))
+            i.apply {
+                putExtra("eventName", events[position].name)
+                putExtra("eventAddress", events[position].address)
+            }
+
+            startActivity(i)
         }
     }
 
