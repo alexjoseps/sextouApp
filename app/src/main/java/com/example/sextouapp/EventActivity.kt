@@ -61,6 +61,11 @@ class EventActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener {
                 startActivity(Intent(baseContext, MainActivity::class.java))
                 true
             }
+            R.id.reservations -> {
+                Log.i("SextouApp", "Reservas");
+                startActivity(Intent(baseContext, ReservationActivity::class.java))
+                true
+            }
 
             else -> super.onOptionsItemSelected(item)
         }
