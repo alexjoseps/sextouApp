@@ -37,8 +37,7 @@ class MainActivity : AppCompatActivity() {
             val i = Intent(baseContext, EventActivity::class.java)
 
             i.apply {
-                putExtra("eventName", events[position].name)
-                putExtra("eventAddress", events[position].address)
+                putExtra("eventId", events[position].id)
             }
 
             startActivity(i)

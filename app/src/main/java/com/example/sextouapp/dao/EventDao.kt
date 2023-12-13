@@ -1,5 +1,6 @@
 package com.example.sextouapp.dao
 
+import android.content.ContentValues
 import android.content.Context
 import android.database.sqlite.SQLiteDatabase
 import android.util.Log
@@ -14,6 +15,31 @@ class EventDao(context: Context?) {
     init {
         Log.d("SextouApp", "EventDao init()")
         database = Database(context)
+    }
+
+    fun findById(eventId: Int): Event {
+        sqlOpen = database.readableDatabase
+
+        val cursor = sqlOpen.query(
+            Event.TABLE,
+            null,
+            "id = ?",
+            arrayOf(eventId.toString()),
+            null,
+            null,
+            null
+        )
+
+        cursor.moveToFirst()
+        val event = Event(
+            cursor.getInt(cursor.getColumnIndexOrThrow(Event.ID)),
+            cursor.getString(cursor.getColumnIndexOrThrow(Event.NAME)),
+            cursor.getString(cursor.getColumnIndexOrThrow(Event.ADDRESS)),
+            cursor.getInt(cursor.getColumnIndexOrThrow(Event.CATEGORY_ID))
+        )
+        cursor.close()
+
+        return event
     }
 
     fun getAll(): ArrayList<Event> {
@@ -37,6 +63,11 @@ class EventDao(context: Context?) {
         cursor.close()
 
         return events
+    }
+
+    fun update(eventId: Int, contentValues: ContentValues): Int {
+        sqlOpen = database.readableDatabase
+        return sqlOpen.update(Event.TABLE, contentValues, "id = ?", arrayOf(eventId.toString()))
     }
 
     fun delete(eventId: Int): Int {

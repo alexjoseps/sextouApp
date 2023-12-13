@@ -1,5 +1,6 @@
 package com.example.sextouapp
 
+import android.content.ContentValues
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
@@ -12,9 +13,13 @@ import android.widget.ArrayAdapter
 import android.widget.Button
 import android.widget.EditText
 import android.widget.Spinner
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import com.example.sextouapp.dao.CategoryDao
+import com.example.sextouapp.dao.EventDao
+import com.example.sextouapp.dao.models.Category
+import com.example.sextouapp.dao.models.Event
 
 class EventActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener {
     override fun onItemSelected(parent: AdapterView<*>, view: View?, pos: Int, id: Long) {
@@ -30,23 +35,45 @@ class EventActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener {
         setContentView(R.layout.activity_event)
 
         val toolbar = findViewById<Toolbar>(R.id.toolbar)
+        val saveButton: Button = findViewById(R.id.saveEvent)
+        val eventNameInput: EditText = findViewById(R.id.eventNameInput)
+        val eventAddressInput: EditText = findViewById(R.id.eventAddressInput)
+        val spinner: Spinner = findViewById(R.id.categorySpinner)
+
+        // Toolbar
         setSupportActionBar(toolbar)
         supportActionBar?.setDisplayShowTitleEnabled(true);
         supportActionBar?.title = "Sextou!";
         supportActionBar?.subtitle = "Ache seu rolê"
+        //
 
-        val eventNameInput: EditText = findViewById(R.id.eventNameInput)
-        val eventAddressInput: EditText = findViewById(R.id.eventAddressInput)
+        val event: Event = EventDao(baseContext).findById(intent.getIntExtra("eventId", 0))
+        val category: Category = CategoryDao(baseContext).findById(event.categoryId)
+        eventNameInput.setText(event.name)
+        eventAddressInput.setText(event.address)
+        saveButton.setOnClickListener {
+            val eventValues = ContentValues()
+            eventValues.put(Event.NAME, eventNameInput.text.toString())
+            eventValues.put(Event.ADDRESS, eventAddressInput.text.toString())
 
-        eventNameInput.setText(intent.getStringExtra("eventName"))
-        eventAddressInput.setText(intent.getStringExtra("eventAddress"))
+            val newCategory = CategoryDao(baseContext).findByName(spinner.selectedItem.toString())
+            eventValues.put(Event.CATEGORY_ID, newCategory.id)
 
-        val spinner: Spinner = findViewById(R.id.categorySpinner)
+            EventDao(baseContext).update(event.id, eventValues)
+            AlertDialog.Builder(this)
+                .setTitle("Evento alterado com sucesso")
+                .setPositiveButton(
+                    "Ok"
+                ) { _, _ -> startActivity(Intent(baseContext, MainActivity::class.java)) }
+                .create()
+                .show()
+        }
         val categories = CategoryDao(baseContext).getAll().map { it.name }
         val categorySpinnerAdapter =
             ArrayAdapter(this, android.R.layout.simple_spinner_item, categories)
         categorySpinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
         spinner.adapter = categorySpinnerAdapter
+        spinner.setSelection(categorySpinnerAdapter.getPosition(category.name))
         spinner.onItemSelectedListener = this
     }
 

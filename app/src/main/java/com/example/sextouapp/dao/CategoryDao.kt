@@ -16,6 +16,52 @@ class CategoryDao(context: Context?) {
         database = Database(context)
     }
 
+    fun findById(categoryId: Int): Category {
+        sqlOpen = database.readableDatabase
+
+        val cursor = sqlOpen.query(
+            Category.TABLE,
+            null,
+            "id = ?",
+            arrayOf(categoryId.toString()),
+            null,
+            null,
+            null
+        )
+
+        cursor.moveToFirst()
+        val category = Category(
+            cursor.getInt(cursor.getColumnIndexOrThrow(Category.ID)),
+            cursor.getString(cursor.getColumnIndexOrThrow(Category.NAME))
+        )
+        cursor.close()
+
+        return category
+    }
+
+    fun findByName(categoryName: String): Category {
+        sqlOpen = database.readableDatabase
+
+        val cursor = sqlOpen.query(
+            Category.TABLE,
+            null,
+            "name = ?",
+            arrayOf(categoryName),
+            null,
+            null,
+            null
+        )
+
+        cursor.moveToFirst()
+        val category = Category(
+            cursor.getInt(cursor.getColumnIndexOrThrow(Category.ID)),
+            cursor.getString(cursor.getColumnIndexOrThrow(Category.NAME))
+        )
+        cursor.close()
+
+        return category
+    }
+
     fun getAll(): ArrayList<Category> {
         sqlOpen = database.readableDatabase
 
@@ -26,6 +72,7 @@ class CategoryDao(context: Context?) {
         val events = ArrayList<Category>()
         while (cursor.moveToNext()) {
             val category = Category(
+                cursor.getInt(cursor.getColumnIndexOrThrow(Category.ID)),
                 cursor.getString(cursor.getColumnIndexOrThrow(Category.NAME))
             )
 
