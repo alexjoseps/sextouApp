@@ -65,6 +65,11 @@ class EventDao(context: Context?) {
         return events
     }
 
+    fun create(contentValues: ContentValues): Long {
+        sqlOpen = database.writableDatabase
+        return sqlOpen.insert(Event.TABLE, null, contentValues)
+    }
+
     fun update(eventId: Int, contentValues: ContentValues): Int {
         sqlOpen = database.readableDatabase
         return sqlOpen.update(Event.TABLE, contentValues, "id = ?", arrayOf(eventId.toString()))

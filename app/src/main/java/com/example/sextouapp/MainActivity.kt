@@ -10,6 +10,7 @@ import android.view.MenuInflater
 import android.view.MenuItem
 import android.widget.ArrayAdapter
 import android.widget.ListView
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.widget.Toolbar
 import com.example.sextouapp.adapters.EventItem
 import com.example.sextouapp.dao.EventDao
@@ -44,9 +45,20 @@ class MainActivity : AppCompatActivity() {
         }
 
         listView.setOnItemLongClickListener { parent, view, position, id ->
-            EventDao(baseContext).delete(events[position].id)
-            eventItemAdapter.notifyDataSetChanged()
-            startActivity(Intent(baseContext, MainActivity::class.java))
+            AlertDialog.Builder(this)
+                .setTitle("Deseja remover esse evento?")
+                .setPositiveButton(
+                    "Sim"
+                ) { _, _ ->
+                    EventDao(baseContext).delete(events[position].id)
+                    eventItemAdapter.notifyDataSetChanged()
+                    startActivity(Intent(baseContext, MainActivity::class.java))
+                }
+                .setNegativeButton("Voltar") { dialog, _ ->
+                    dialog.cancel()
+                }
+                .create()
+                .show()
             true
         }
     }
@@ -61,8 +73,10 @@ class MainActivity : AppCompatActivity() {
         return when (item.itemId) {
             R.id.new_event -> {
                 Log.i("SextouApp", "Criar evento");
+                startActivity(Intent(baseContext, NewEventActivity::class.java))
                 true
             }
+
             R.id.reservations -> {
                 Log.i("SextouApp", "Reservas");
                 startActivity(Intent(baseContext, ReservationActivity::class.java))

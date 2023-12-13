@@ -13,6 +13,6 @@ class Participant(var id: Int, var name: String, var document: String, var reser
                 "$NAME TEXT NOT NULL, " +
                 "$DOCUMENT TEXT NOT NULL UNIQUE, " +
                 "$RESERVATION_ID INTEGER NOT NULL, " +
-                "FOREIGN KEY($RESERVATION_ID) REFERENCES ${Reservation.TABLE} (${Reservation.ID}));";
+                "CONSTRAINT fk_reservations FOREIGN KEY ($RESERVATION_ID) REFERENCES ${Reservation.TABLE} (${Reservation.ID}) ON DELETE CASCADE);";
     }
 }

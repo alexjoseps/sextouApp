@@ -9,6 +9,6 @@ class Reservation(var id: Int, var eventId: Int) {
         val SQL_CREATE = "CREATE TABLE $TABLE ( " +
                 "$ID INTEGER PRIMARY KEY AUTOINCREMENT, " +
                 "$EVENT_ID INTEGER NOT NULL, " +
-                "FOREIGN KEY($EVENT_ID) REFERENCES ${Event.TABLE} (${Event.ID}));";
+                "CONSTRAINT fk_events FOREIGN KEY($EVENT_ID) REFERENCES ${Event.TABLE} (${Event.ID}) ON DELETE CASCADE);";
     }
 }

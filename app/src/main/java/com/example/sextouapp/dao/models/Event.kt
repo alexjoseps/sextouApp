@@ -13,7 +13,7 @@ class Event(var id: Int, var name: String, var address: String, var categoryId: 
                 "$NAME TEXT NOT NULL UNIQUE, " +
                 "$ADDRESS TEXT NOT NULL, " +
                 "$CATEGORY_ID INTEGER NOT NULL, " +
-                "FOREIGN KEY($CATEGORY_ID) REFERENCES ${Category.TABLE} (${Category.ID}));";
+                "CONSTRAINT fk_categories FOREIGN KEY ($CATEGORY_ID) REFERENCES ${Category.TABLE} (${Category.ID}) ON DELETE CASCADE)";
     }
 
 
